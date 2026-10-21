@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}GrievanceAI{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar"><a class="brand" href="{{ url_for('index') }}"><span class="brand-icon">✦</span> Grievance<span class="ai">AI</span></a>
+<nav>
+{% if current_user.is_authenticated %}
+  {% if current_user.role == 'developer' %}<a href="{{ url_for('developer_dashboard') }}">Developer Console</a>{% else %}<a href="{{ url_for('user_dashboard') }}">My Dashboard</a><a href="{{ url_for('new_grievance') }}">Submit grievance</a>{% endif %}
+  <span class="nav-user">{{ current_user.name }}</span>
+  <form action="{{ url_for('logout') }}" method="post" class="inline"><button class="nav-logout" type="submit">Log out</button></form>
+{% else %}<a href="{{ url_for('login') }}">Log in</a><a class="nav-cta" href="{{ url_for('signup') }}">Sign up</a>{% endif %}
+</nav></header>
+<main class="container">
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flashes">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+{% block content %}{% endblock %}
+</main>
+<footer>GrievanceAI · Workflow and grievance intelligence</footer>
+</body></html>
